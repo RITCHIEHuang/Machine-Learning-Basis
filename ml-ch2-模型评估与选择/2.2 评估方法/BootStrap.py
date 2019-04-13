@@ -4,6 +4,12 @@ import pandas as pd
 from sklearn.linear_model import LogisticRegression
 from sklearn.preprocessing import LabelEncoder
 
+'''
+BootStrap 方法的实现:
+实现样本的有放回的取样，样本数量为N, 则算法做N次抽样。
+抽样中选取的不重复的样本作为训练集，剩余的样本作为测试集。
+这种策略不适合大样本的情况，而且难以保证样本的层次性。
+'''
 class BootStrap:
     def __init__(self):
         pass
