@@ -32,19 +32,6 @@ df.tail()
 
 
 <div>
-<style scoped>
-    .dataframe tbody tr th:only-of-type {
-        vertical-align: middle;
-    }
-
-    .dataframe tbody tr th {
-        vertical-align: top;
-    }
-
-    .dataframe thead th {
-        text-align: right;
-    }
-</style>
 <table border="1" class="dataframe">
   <thead>
     <tr style="text-align: right;">
@@ -239,37 +226,49 @@ print('CV accuracy: {} +/- {}'.format(np.mean(scores), np.std(scores)))
 ```python
 import random
 
-def BootStrap(num):
-    slice = []
-    while(len(slice) < num):
-        p = random.randrange(0, num)
-        slice.append(p)
-    return slice
-
-def getDataByIndex(x, y, index):
-    xx = []
-    yy = []
+class BootStrap:
+    def __init__(self):
+        pass
     
-    for i in index:
-        xx.append(x[i])
-        yy.append(y[i])
+    def generate_index(self, num):
+        slice = []
+        while(len(slice) < num):
+            p = random.randrange(0, num)
+            slice.append(p)
+        return slice
+    
+    def train_test_split(self, X, y):
+        assert len(X) == len(y)
         
-    return xx, yy
+        samples_num = len(X)
+        
+        all_index = set(range(samples_num))
+        train_index = self.generate_index(samples_num)
+        test_index = list(all_index - set(train_index))
+        
+        X_train = []
+        X_test = []
+        y_train = []
+        y_test = []
+        
+        for i in train_index:
+            X_train.append(X[i])
+            y_train.append(y[i])
+            
+        for j in test_index:
+            X_test.append(X[j])
+            y_test.append(y[j])
+        
+        return X_train, X_test, y_train, y_test
 
+    
 N = 10
-N_samples = len(y)
-all_index = set(range(N_samples))
 lr = LogisticRegression(solver = 'lbfgs', multi_class = 'auto', C = 100.0, random_state = 1)
+bootstrap = BootStrap()
 
 scores = []
 for i in range(N):
-    train_index = BootStrap(N_samples)
-    unique_index = np.unique(train_index)
-    test_index = list(all_index - set(unique_index))
-    
-    X_train, y_train = getDataByIndex(X, y, train_index)
-    X_test, y_test = getDataByIndex(X, y, test_index)
-    
+    X_train, X_test, y_train, y_test = bootstrap.train_test_split(X, y)
     lr.fit(X_train, y_train)
     score = lr.score(X_test, y_test)
     
@@ -281,17 +280,17 @@ print('BootStrap: Accuracy: {} +/- {}'.format(np.mean(scores), np.std(scores)))
     
 ```
 
-    iter 1 - Accuracy: 0.9821428571428571
-    iter 2 - Accuracy: 0.9649122807017544
+    iter 1 - Accuracy: 0.9622641509433962
+    iter 2 - Accuracy: 0.9615384615384616
     iter 3 - Accuracy: 0.9464285714285714
-    iter 4 - Accuracy: 0.9591836734693877
-    iter 5 - Accuracy: 0.9818181818181818
-    iter 6 - Accuracy: 0.9642857142857143
-    iter 7 - Accuracy: 0.9672131147540983
+    iter 4 - Accuracy: 0.9310344827586207
+    iter 5 - Accuracy: 0.9622641509433962
+    iter 6 - Accuracy: 0.9777777777777777
+    iter 7 - Accuracy: 1.0
     iter 8 - Accuracy: 0.9629629629629629
-    iter 9 - Accuracy: 0.9361702127659575
-    iter 10 - Accuracy: 1.0
-    BootStrap: Accuracy: 0.9665117569329486 +/- 0.01731566990174846
+    iter 9 - Accuracy: 0.9814814814814815
+    iter 10 - Accuracy: 0.9591836734693877
+    BootStrap: Accuracy: 0.9644935713304056 +/- 0.01794667551467303
 
 
 
