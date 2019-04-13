@@ -218,7 +218,7 @@ print('CV accuracy: {} +/- {}'.format(np.mean(scores), np.std(scores)))
 
 ## 3.自助法
 
-放回的抽样选择
+有放回的抽样策略[代码实现](BootStrap.py)
 
 ![BootStrap](BootStrap.png)
 
