@@ -21,7 +21,7 @@ $$
 import numpy as np
 import pandas as pd
 
-df = pd.read_csv('../../Datasets/iris.data', header = None)
+df = pd.read_csv(datasets, header = None)
 # show the first 5 items
 df.head()
 # show the last 5 items
